@@ -22,7 +22,8 @@ public class Transaction {
             network.setFirstLayerPorts(FIRST_LAYER_PORTS);
             network.setSecondLayerPorts(SECOND_LAYER_PORTS);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("Error, transactions file not found");
+            System.exit(1);
         }
     }
 
@@ -32,21 +33,23 @@ public class Transaction {
         String transaction, numbers, orders;
         int layer;
 
-        while (fileReader.hasNextLine()) {
+        if (fileReader != null) {
+            while (fileReader.hasNextLine()) {
 
-            transaction = fileReader.nextLine();
+                transaction = fileReader.nextLine();
 
-            operations = transaction.split(",");
+                operations = transaction.split(",");
 
-            layer = getLayer(operations);
-            numbers = getNumbers(operations);
-            orders = getOrders(operations, layer);
+                layer = getLayer(operations);
+                numbers = getNumbers(operations);
+                orders = getOrders(operations, layer);
 
-            System.out.println(orders);
-            sendTransaction(layer, numbers, orders);
+                System.out.println(orders);
+                sendTransaction(layer, numbers, orders);
+            }
+
+            fileReader.close();
         }
-
-        fileReader.close();
     }
 
     private String getOrders(String[] operations, int layer) {
