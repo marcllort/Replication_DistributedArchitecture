@@ -59,9 +59,8 @@ public class Network {
         }
     }
 
-    public void broadcastCoreLayer(String message){
-        for (int port :
-                this.coreLayerPorts) {
+    public void broadcastCoreLayer(String message) {
+        for (int port : this.coreLayerPorts) {
             sendMessage(port, message);
         }
     }

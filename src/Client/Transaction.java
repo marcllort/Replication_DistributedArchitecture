@@ -43,9 +43,6 @@ public class Transaction {
 
                 layer = getLayer(operations);
                 numbers = getNumbers(operations);
-                //orders = getOrders(operations, layer);
-
-                //System.out.println(orders);
                 sendTransaction(layer, numbers);
                 try {
                     TimeUnit.SECONDS.sleep(5);
@@ -59,20 +56,6 @@ public class Transaction {
         }
     }
 
-    private String getOrders(String[] operations, int layer) {
-        String aux;
-        String orders;
-        orders = "";
-        if (layer == 0) {
-
-            for (int i = 1; i < operations.length - 1; i++) {
-                aux = operations[i].substring(0, operations[i].indexOf('('));
-                if (i == 1) orders += aux;
-                else orders += "-" + aux;
-            }
-        }
-        return orders;
-    }
 
     private String getNumbers(String[] operations) {
         String aux;

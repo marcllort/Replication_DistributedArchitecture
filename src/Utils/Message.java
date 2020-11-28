@@ -21,7 +21,7 @@ public class Message {
         this.value = Integer.parseInt(value);
     }
 
-    public Message(String port, String write, String line) {
+    public Message(String port, String action, String line) {
         this.port = Integer.parseInt(port);
         this.action = action;
         this.line = Integer.parseInt(line);

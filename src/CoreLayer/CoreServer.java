@@ -110,7 +110,7 @@ public class CoreServer {
                 operations.add(m);
             } else {
                 // Read operation
-                Message m = new Message(port, "write", transaction);
+                Message m = new Message(port, "read", transaction);
                 operations.add(m);
             }
         }
