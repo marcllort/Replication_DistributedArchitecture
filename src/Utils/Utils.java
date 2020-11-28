@@ -9,8 +9,8 @@ public class Utils {
     public static final int FIRST_LAYER_PORT = 6110;
     public static final int SECOND_LAYER_PORT = 6210;
 
-    public static final int[] CORE_LAYER_PORTS = {6011, 6012, 6013};
-    public static final int[] FIRST_LAYER_PORTS = {6111, 6112};
-    public static final int[] SECOND_LAYER_PORTS = {6211, 6212};
+    public static final int[] CORE_LAYER_PORTS = {6010, 6011, 6012};
+    public static final int[] FIRST_LAYER_PORTS = {6110, 6111};
+    public static final int[] SECOND_LAYER_PORTS = {6210, 6211};
 
 }

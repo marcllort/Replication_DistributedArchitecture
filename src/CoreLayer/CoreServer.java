@@ -1,137 +1,144 @@
 package CoreLayer;
 
+import Utils.Message;
 import Utils.Network;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class CoreServer {
 
     private Network network;
-    private String portSender;
-    private String action;
+
     private String message;
-    private Map<String, String> data = new HashMap<>();
-    private String key, valor;
+    private Map<Integer, Integer> data = new HashMap<>();
     private int numberOfAct = 0;
 
     public CoreServer(Network network) {
         this.network = network;
     }
 
-    public void startReplication(){
+    public void startReplication() {
         String response;
 
-        while(true) {
-            //recibimos un mensaje en la core layer
+        while (true) {
             this.message = this.network.receiveMessage();
             System.out.println("RECIBIDO " + this.message);
-            //parseamos el mensaje
-            this.parseMessage(this.message);
-            //si la peticion es de lectura, simplemente retornamos el valor
-            if(this.action.equals("read")){
+            ArrayList<Message> operations = this.parseMessage(this.message);
 
-                System.out.println("He recibido un READ");
-                System.out.println("El puerto  " + this.portSender);
-                System.out.println("La key a leer " + this.key);
+            for (Message operation : operations) {
+                if (operation.getAction().equals("read")) {
 
-                //miramos si tenemos valor
-                this.message = this.data.getOrDefault(this.key,"null");
+                    System.out.println("He recibido un READ");
+                    System.out.println("El puerto  " + operation.getPort());
+                    System.out.println("La key a leer " + operation.getLine());
 
-                //respondemos al cliente con la respuesta
-                this.network.sendMessage(this.network.getClientPort(),message);
+                    //miramos si tenemos valor
+                    this.message = String.valueOf(this.data.getOrDefault(operation.getLine(), Integer.valueOf(-1)));
 
-            }else{
+                    //respondemos al cliente con la respuesta
+                    this.network.sendMessage(this.network.getClientPort(), message);
 
-                System.out.println("He recibido un WRITE");
-                System.out.println("El puerto " + this.portSender);
-                System.out.println("El valor a escribir key:" + this.key + " valor:" + this.valor);
+                } else {
+
+                    System.out.println("He recibido un WRITE");
+                    System.out.println("El puerto " + operation.getPort());
+                    System.out.println("El valor a escribir key:" + operation.getLine() + " valor:" + operation.getValue());
 
 
-                this.data.put(this.key,this.valor);
+                    this.data.put(operation.getLine(), operation.getValue());
 
-                //en caso de que quien lo envie sea el cliente
-                if(Integer.valueOf(this.portSender) == this.network.getClientPort()){
+                    //en caso de que quien lo envie sea el cliente
+                    if (operation.getPort() == this.network.getClientPort()) {
 
-                    //replicamos el mensaje sustituyendo el puerto
-                    message = this.action + "&" + this.key + "&" + this.valor;
+                        //replicamos el mensaje sustituyendo el puerto
+                        message = operation.getLine() + ";" + operation.getValue();
+                        this.network.broadcastCoreLayer(this.message);
 
-                    //En caso de lectura como el core layer es update everywhere hacemos
-                    //un broadcast de la peticion
-                    this.network.broadcastCoreLayer(this.message);
+                        //Esperamos el ok de los otros nodos del core layer por ser eager
+                        for (int i = 0; i < this.network.getCoreLayerPorts().length; i++) {
+                            response = this.network.receiveMessage();
+                            System.out.println("Me han contestado " + response);
+                        }
 
-                    //Esperamos el ok de los otros nodos del core layer por ser eager
-                    for (int i =0 ; i < this.network.getCoreLayerPorts().length; i++){
-                        response = this.network.receiveMessage();
-                        System.out.println("Me han contestado " + response);
+                        //respondemos al cliente con ACK
+                        message = "ACK";
+
+                        this.network.sendMessage(operation.getPort(), message);
+
+                    } else {
+
+                        //respondemos
+                        message = "ACK";
+
+                        this.network.sendMessage(operation.getPort(), message);
                     }
 
-                    //respondemos al cliente con ACK
-                    message = "ACK";
 
-                    this.network.sendMessage(Integer.valueOf(this.portSender),message);
+                    System.out.println("---------------------------------------");
 
-                }else{
+                    numberOfAct++;
+                    this.sendMessageToServer();
 
-                    //respondemos
-                    message = "ACK";
+                    if (numberOfAct == 10 && (this.network.getMyPort() == 6663 || this.network.getMyPort() == 6662)) {
+                        numberOfAct = 0;
+                        this.sendMessageToLayer1();
+                    }
 
-                    this.network.sendMessage(Integer.valueOf(this.portSender),message);
+
                 }
-
-
-                System.out.println("---------------------------------------");
-
-                numberOfAct++;
-                this.sendMessageToServer();
-
-                if(numberOfAct == 10 && (this.network.getMyPort() == 6663 || this.network.getMyPort() == 6662)){
-                    numberOfAct = 0;
-                    this.sendMessageToLayer1();
-                }
-
-
             }
 
         }
     }
 
-    private void parseMessage(String message){
+    private ArrayList<Message> parseMessage(String message) {
+
+        ArrayList<Message> operations = new ArrayList<>();
+
         String[] parts = message.split("&");
-        this.portSender = (parts[0]);
-        this.action = parts[1];
+        String[] transactions = parts[1].split("-");
 
-        if(this.action.equals("read")){
-            this.key = (parts[2]);
+        String port = (parts[0]);
 
-        }else{
-            this.key = (parts[2]);
-            this.valor = (parts[3]);
-
+        for (String transaction : transactions) {
+            if (transaction.contains(";")) {
+                // Write operation
+                String[] writeOperations = transaction.split(";");
+                Message m = new Message(port, "write", writeOperations[0], writeOperations[1]);
+                operations.add(m);
+            } else {
+                // Read operation
+                Message m = new Message(port, "write", transaction);
+                operations.add(m);
+            }
         }
+
+        return operations;
 
     }
 
-    private void sendMessageToLayer1(){
+    private void sendMessageToLayer1() {
         String message = "";
 
-        for (String key :
+        for (Integer key :
                 this.data.keySet()) {
             message = message + key + "&" + this.data.get(key) + "&";
         }
 
-        this.network.sendMessage(this.network.getFirstLayerPorts()[0],message);
+        this.network.sendMessage(this.network.getFirstLayerPorts()[0], message);
     }
 
-    private void sendMessageToServer(){
+    private void sendMessageToServer() {
         String message = "";
 
-        for (String key :
+        for (Integer key :
                 this.data.keySet()) {
             message = message + key + "&" + this.data.get(key) + "&";
         }
 
-        this.network.sendMessage(6659,message);
+        this.network.sendMessage(6659, message);
     }
 
 }

@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import static Utils.Utils.*;
 
@@ -42,10 +43,16 @@ public class Transaction {
 
                 layer = getLayer(operations);
                 numbers = getNumbers(operations);
-                orders = getOrders(operations, layer);
+                //orders = getOrders(operations, layer);
 
-                System.out.println(orders);
-                sendTransaction(layer, numbers, orders);
+                //System.out.println(orders);
+                sendTransaction(layer, numbers);
+                try {
+                    TimeUnit.SECONDS.sleep(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
             }
 
             fileReader.close();
@@ -91,16 +98,12 @@ public class Transaction {
         return layer;
     }
 
-    private void sendTransaction(int layer, String numbers, String orders) {
+    private void sendTransaction(int layer, String numbers) {
 
         int port = getPort(layer);
 
         network.sendMessage(port, numbers);
         System.out.println("SEND MESSAGE TO " + port + ": " + numbers);
-        if (layer == 0) {
-            network.sendMessage(port, orders);
-            System.out.println("SEND MESSAGE TO " + port + ": " + orders);
-        }
 
         System.out.println("WAITING FOR RESPONSE");
         String response = network.receiveMessage();
