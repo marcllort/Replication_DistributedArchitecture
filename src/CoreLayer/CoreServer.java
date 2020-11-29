@@ -12,24 +12,21 @@ import static Utils.Utils.*;
 
 public class CoreServer {
 
-    private Network network;
-
-    private String message;
-    private Map<Integer, Integer> data = new HashMap<>();
-    private int numberOfAct = 0;
-    private Logger logger;
+    private final Network network;
+    private final Logger logger;
+    private final Map<Integer, Integer> infoHashMap;
+    private int numberOfAct;
 
     public CoreServer(Network network) {
         this.network = network;
+        this.infoHashMap = new HashMap<>();
+        this.numberOfAct = 0;
         this.logger = new Logger("src/logs/core_layer_" + (network.getMyPort() - CORE_LAYER_PORT) + ".txt");
     }
 
-    public void startReplication() {
-
+    public void replicate() {
         while (true) {
-            this.message = this.network.receiveMessage();
-            System.out.println("RECIBIDO " + this.message);
-            ArrayList<Message> operations = this.parseMessage(this.message);
+            ArrayList<Message> operations = parseMessage(network.receiveMessage());
 
             for (Message operation : operations) {
                 if (operation.getAction().equals(READ_ACTION)) {
@@ -42,109 +39,66 @@ public class CoreServer {
         }
     }
 
-    private void manageRead(Message receivedMessage){
-        System.out.println("He recibido un READ");
-        System.out.println("El puerto  " + receivedMessage.getPort());
-        System.out.println("La key a leer " + receivedMessage.getLine());
+    private void manageRead(Message receivedMessage) {
+        printMessage(receivedMessage);
 
-        //check value to read
-        this.message = String.valueOf(this.data.getOrDefault(receivedMessage.getLine(), Integer.valueOf(-1)));
+        // Get value from hashmap
+        String message = String.valueOf(infoHashMap.getOrDefault(receivedMessage.getLine(), -1));
 
-        //send the value to the client
-        this.network.sendMessage(this.network.getClientPort(), message);
-
+        // Send value to the client
+        network.sendMessage(network.getClientPort(), message);
     }
 
-    private void manageWrite(Message receivedMessage){
-        String ack;
-        System.out.println("He recibido un WRITE");
-        System.out.println("El puerto " + receivedMessage.getPort());
-        System.out.println("El valor a escribir key:" + receivedMessage.getLine() + " valor:" + receivedMessage.getValue());
+    private void manageWrite(Message receivedMessage) {
+        String message;
+        printMessage(receivedMessage);
 
+        // Add new value to the hashMap
+        infoHashMap.put(receivedMessage.getLine(), receivedMessage.getValue());
 
-        this.data.put(receivedMessage.getLine(), receivedMessage.getValue());
-
-        //In case the one who sends is the client
-        if (receivedMessage.getPort() == this.network.getClientPort()) {
-
+        if (receivedMessage.getPort() == network.getClientPort()) {
             message = receivedMessage.getLine() + ";" + receivedMessage.getValue();
-            this.network.broadcastCoreLayer(this.message);
+            network.broadcastCoreLayer(message);
 
-            //We wait for the ack before accepting another transaction (EAGER)
-            for (int i = 0; i < this.network.getCoreLayerPorts().length; i++) {
-                ack = this.network.receiveMessage();
-                System.out.println("Me han contestado " + ack);
+            //We wait for the ACK from other nodes before accepting another transaction (EAGER)
+            for (int i = 0; i < network.getCoreLayerPorts().length; i++) {
+                System.out.println("ANSWER: " + network.receiveMessage());
             }
-            message = "ACK";
-            this.network.sendMessage(receivedMessage.getPort(), message);
-
-        } else {
-
-            //answering
-            message = "ACK";
-
-            this.network.sendMessage(receivedMessage.getPort(), message);
         }
 
+        // Answer with ACK to the message sender
+        network.sendMessage(receivedMessage.getPort(), "ACK");
+        printSeparator();
 
-        System.out.println("---------------------------------------");
-
+        // Update number of actualizations done
         numberOfAct++;
-        this.sendMessageToServer();
 
-        if (numberOfAct == 10 && (this.network.getMyPort() == CORE_LAYER_PORTS[0] || this.network.getMyPort() == CORE_LAYER_PORTS[1])) {
-            numberOfAct = 0;
-            this.sendMessageToLayer1();
-        }
-
+        replicateToFirstLayer();
 
     }
-    private ArrayList<Message> parseMessage(String message) {
 
-        ArrayList<Message> operations = new ArrayList<>();
-
-        String[] parts = message.split("&");
-        String[] transactions = parts[1].split("-");
-
-        String port = (parts[0]);
-
-        for (String transaction : transactions) {
-            if (transaction.contains(";")) {
-                // Write operation
-                String[] writeOperations = transaction.split(";");
-                Message m = new Message(port, WRITE_ACTION, writeOperations[0], writeOperations[1]);
-                operations.add(m);
-            } else {
-                // Read operation
-                Message m = new Message(port, READ_ACTION, transaction);
-                operations.add(m);
+    private void replicateToFirstLayer() {
+        if (numberOfAct == 10) {
+            if (network.getMyPort() == CORE_LAYER_PORTS[1]) {
+                network.sendMessage(FIRST_LAYER_PORTS[0], hashMapToMessage());
+                numberOfAct = 0;
+            } else if (network.getMyPort() == CORE_LAYER_PORTS[2]) {
+                network.sendMessage(FIRST_LAYER_PORTS[1], hashMapToMessage());
+                numberOfAct = 0;
             }
         }
-
-        return operations;
-
     }
 
-    private void sendMessageToLayer1() {
+    private String hashMapToMessage() {
         String message = "";
 
-        for (Integer key :
-                this.data.keySet()) {
-            message = message + key + "&" + this.data.get(key) + "&";
+        for (Integer key : infoHashMap.keySet()) {
+            message = message + key + "-" + infoHashMap.get(key) + "-";
         }
 
-        this.network.sendMessage(this.network.getFirstLayerPorts()[0], message);
-    }
+        message = message.substring(0, message.length() - 1);
 
-    private void sendMessageToServer() {
-        String message = "";
-
-        for (Integer key :
-                this.data.keySet()) {
-            message = message + key + "&" + this.data.get(key) + "&";
-        }
-
-        this.network.sendMessage(6659, message);
+        return message;
     }
 
 }

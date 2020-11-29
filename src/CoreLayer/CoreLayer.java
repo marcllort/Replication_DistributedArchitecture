@@ -8,7 +8,7 @@ public class CoreLayer {
 
     public static void main(String args[]) {
 
-        if ( args.length != 1){
+        if (args.length != 1) {
             System.out.println("Error in number of parameters");
             return;
         }
@@ -17,14 +17,11 @@ public class CoreLayer {
         System.out.println("MY PORT: " + port);
 
         network.setClientPort(CLIENT_PORT);
-
         network.setCoreLayerPorts(CORE_LAYER_PORTS);
-
         network.setFirstLayerPorts(FIRST_LAYER_PORTS);
 
-
         CoreServer replication = new CoreServer(network);
-        replication.startReplication();
+        replication.replicate();
     }
 
 }

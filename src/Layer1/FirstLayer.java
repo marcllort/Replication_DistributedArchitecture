@@ -1,6 +1,5 @@
 package Layer1;
 
-import CoreLayer.CoreServer;
 import Utils.Network;
 
 import java.util.HashMap;
@@ -10,7 +9,7 @@ import static Utils.Utils.*;
 import static Utils.Utils.FIRST_LAYER_PORTS;
 
 public class FirstLayer {
-    private static Map<String,String> data = new HashMap<>();
+    private static Map<Integer, Integer> infoHashMap = new HashMap<>();
 
     public static void main(String args[]) {
 
@@ -30,10 +29,10 @@ public class FirstLayer {
 
         network.setSecondLayerPorts(SECOND_LAYER_PORTS);
 
-        Layer1 replication = new Layer1(network, data);
-        replication.startReplication();
+        FistLayerServer replication = new FistLayerServer(network, infoHashMap);
+        replication.replicate();
 
-        TimerThread timer = new TimerThread(network, data);
+        ReplicationThread timer = new ReplicationThread(network, infoHashMap);
         timer.start();
     }
 

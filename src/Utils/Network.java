@@ -23,24 +23,23 @@ public class Network {
         try {
             this.myPort = ownPort;
             this.socket = new DatagramSocket(ownPort);
-            receiverHost = InetAddress.getLocalHost();
-
+            this.receiverHost = InetAddress.getLocalHost();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public String receiveMessage() {
-        byte[] reciverBuffer = new byte[MAX_LEN];
-        DatagramPacket packetReciver = new DatagramPacket(reciverBuffer, MAX_LEN);
+        byte[] receiverBuffer = new byte[MAX_LEN];
+        DatagramPacket packetReceiver = new DatagramPacket(receiverBuffer, MAX_LEN);
 
         try {
-            this.socket.receive(packetReciver);
+            this.socket.receive(packetReceiver);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return new String(packetReciver.getData(), 0, packetReciver.getLength());
+        return new String(packetReceiver.getData(), 0, packetReceiver.getLength());
     }
 
     public void sendMessage(int port, String message) {
@@ -65,14 +64,14 @@ public class Network {
         }
     }
 
-    public void broadcastLayer1(String message){
+    public void broadcastLayer1(String message) {
         for (int port :
                 this.firstLayerPorts) {
             sendMessage(port, message);
         }
     }
 
-    public void broadcastLayer2(String message){
+    public void broadcastLayer2(String message) {
         for (int port :
                 this.secondLayerPorts) {
             sendMessage(port, message);

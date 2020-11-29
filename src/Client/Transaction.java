@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 import static Utils.Utils.*;
 
@@ -23,99 +22,89 @@ public class Transaction {
             network.setFirstLayerPorts(FIRST_LAYER_PORTS);
             network.setSecondLayerPorts(SECOND_LAYER_PORTS);
         } catch (FileNotFoundException e) {
-            System.out.println("Error, transactions file not found");
+            System.err.println("Error, transactions file not found");
             System.exit(1);
         }
     }
 
     public void sendTransactions() {
-
-        String[] operations;
-        String transaction, numbers, orders;
         int layer;
+        String numbers;
+        String[] operations;
 
         if (fileReader != null) {
             while (fileReader.hasNextLine()) {
-
-                transaction = fileReader.nextLine();
-
-                operations = transaction.split(",");
+                operations = fileReader.nextLine().split(",");
 
                 layer = getLayer(operations);
                 numbers = getNumbers(operations);
+
                 sendTransaction(layer, numbers);
-                try {
-                    TimeUnit.SECONDS.sleep(5);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
+                sleep();
             }
-
             fileReader.close();
         }
     }
 
+    private void sendTransaction(int layer, String numbers) {
+        int port = getPort(layer);
+
+        network.sendMessage(port, numbers);
+        System.out.println("[SEND " + port + "] " + numbers);
+
+        String response = network.receiveMessage();
+        System.out.println("[RECEIVE " + port + "] " + response);
+    }
 
     private String getNumbers(String[] operations) {
-        String aux;
-        String numbers;
-        numbers = "";
+        String numberString, numbers = "";
+
         for (int i = 1; i < operations.length - 1; i++) {
-            aux = operations[i].substring(operations[i].indexOf('(') + 1);
-            aux = aux.substring(0, aux.indexOf(')'));
-            if (i == 1) numbers += aux;
-            else numbers += "-" + aux;
+
+            numberString = operations[i].substring(operations[i].indexOf('(') + 1);
+            numberString = numberString.substring(0, numberString.indexOf(')'));
+
+            if (i == 1) {
+                numbers += numberString;
+            } else {
+                numbers += "-" + numberString;
+            }
         }
+
         return numbers;
     }
 
     private int getLayer(String[] operations) {
-        String aux;
         int layer;
+        String layerString;
+
         if (operations[0].contains("<")) {
-            aux = operations[0].substring(operations[0].indexOf('<') + 1);
-            aux = aux.substring(0, aux.indexOf('>'));
-            layer = Integer.parseInt(aux);
-        } else layer = 0;
+            layerString = operations[0].substring(operations[0].indexOf('<') + 1);
+            layerString = layerString.substring(0, layerString.indexOf('>'));
+            layer = Integer.parseInt(layerString);
+        } else {
+            layer = 0;
+        }
+
         return layer;
     }
 
-    private void sendTransaction(int layer, String numbers) {
-
-        int port = getPort(layer);
-
-        network.sendMessage(port, numbers);
-        System.out.println("SEND MESSAGE TO " + port + ": " + numbers);
-
-        System.out.println("WAITING FOR RESPONSE");
-        String response = network.receiveMessage();
-        System.out.println("FROM PORT: " + port + " --> " + response);
-
-    }
-
     private int getPort(int layer) {
-        Random rand = new Random();
-        int random, port = 0;
-        switch (layer) {
+        Random randGen = new Random();
+        int port = 0;
 
+        switch (layer) {
             case 0:
-                random = (rand.nextInt() % 3);
-                if (random < 0) random = random * (-1);
-                port = CORE_LAYER_PORT + random;
+                port = CORE_LAYER_PORT + randGen.nextInt(3);
                 break;
             case 1:
-                random = (rand.nextInt() % 2);
-                if (random < 0) random = random * (-1);
-                random++;
-                port = FIRST_LAYER_PORT + random;
+                port = FIRST_LAYER_PORT + randGen.nextInt(2);
                 break;
             case 2:
-                random = (rand.nextInt() % 2);
-                if (random < 0) random = random * (-1);
-                port = SECOND_LAYER_PORT + random;
+                port = SECOND_LAYER_PORT + randGen.nextInt(2);
                 break;
         }
+
         return port;
     }
 
