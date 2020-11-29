@@ -67,7 +67,6 @@ public class CoreServer {
         //In case the one who sends is the client
         if (receivedMessage.getPort() == this.network.getClientPort()) {
 
-            //replicamos el mensaje sustituyendo el puerto
             message = receivedMessage.getLine() + ";" + receivedMessage.getValue();
             this.network.broadcastCoreLayer(this.message);
 
@@ -93,7 +92,7 @@ public class CoreServer {
         numberOfAct++;
         this.sendMessageToServer();
 
-        if (numberOfAct == 10 && (this.network.getMyPort() == 6663 || this.network.getMyPort() == 6662)) {
+        if (numberOfAct == 10 && (this.network.getMyPort() == CORE_LAYER_PORTS[0] || this.network.getMyPort() == CORE_LAYER_PORTS[1])) {
             numberOfAct = 0;
             this.sendMessageToLayer1();
         }

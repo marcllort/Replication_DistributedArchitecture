@@ -65,6 +65,20 @@ public class Network {
         }
     }
 
+    public void broadcastLayer1(String message){
+        for (int port :
+                this.firstLayerPorts) {
+            sendMessage(port, message);
+        }
+    }
+
+    public void broadcastLayer2(String message){
+        for (int port :
+                this.secondLayerPorts) {
+            sendMessage(port, message);
+        }
+    }
+
     public int getMyPort() {
         return myPort;
     }
