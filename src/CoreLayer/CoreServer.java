@@ -1,11 +1,14 @@
 package CoreLayer;
 
+import Utils.Logger;
 import Utils.Message;
 import Utils.Network;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static Utils.Utils.*;
 
 public class CoreServer {
 
@@ -14,13 +17,14 @@ public class CoreServer {
     private String message;
     private Map<Integer, Integer> data = new HashMap<>();
     private int numberOfAct = 0;
+    private Logger logger;
 
     public CoreServer(Network network) {
         this.network = network;
+        this.logger = new Logger("src/logs/core_layer_" + (network.getMyPort() - CORE_LAYER_PORT) + ".txt");
     }
 
     public void startReplication() {
-        String response;
 
         while (true) {
             this.message = this.network.receiveMessage();
@@ -28,71 +32,74 @@ public class CoreServer {
             ArrayList<Message> operations = this.parseMessage(this.message);
 
             for (Message operation : operations) {
-                if (operation.getAction().equals("read")) {
-
-                    System.out.println("He recibido un READ");
-                    System.out.println("El puerto  " + operation.getPort());
-                    System.out.println("La key a leer " + operation.getLine());
-
-                    //miramos si tenemos valor
-                    this.message = String.valueOf(this.data.getOrDefault(operation.getLine(), Integer.valueOf(-1)));
-
-                    //respondemos al cliente con la respuesta
-                    this.network.sendMessage(this.network.getClientPort(), message);
-
+                if (operation.getAction().equals(READ_ACTION)) {
+                    manageRead(operation);
                 } else {
-
-                    System.out.println("He recibido un WRITE");
-                    System.out.println("El puerto " + operation.getPort());
-                    System.out.println("El valor a escribir key:" + operation.getLine() + " valor:" + operation.getValue());
-
-
-                    this.data.put(operation.getLine(), operation.getValue());
-
-                    //en caso de que quien lo envie sea el cliente
-                    if (operation.getPort() == this.network.getClientPort()) {
-
-                        //replicamos el mensaje sustituyendo el puerto
-                        message = operation.getLine() + ";" + operation.getValue();
-                        this.network.broadcastCoreLayer(this.message);
-
-                        //Esperamos el ok de los otros nodos del core layer por ser eager
-                        for (int i = 0; i < this.network.getCoreLayerPorts().length; i++) {
-                            response = this.network.receiveMessage();
-                            System.out.println("Me han contestado " + response);
-                        }
-
-                        //respondemos al cliente con ACK
-                        message = "ACK";
-
-                        this.network.sendMessage(operation.getPort(), message);
-
-                    } else {
-
-                        //respondemos
-                        message = "ACK";
-
-                        this.network.sendMessage(operation.getPort(), message);
-                    }
-
-
-                    System.out.println("---------------------------------------");
-
-                    numberOfAct++;
-                    this.sendMessageToServer();
-
-                    if (numberOfAct == 10 && (this.network.getMyPort() == 6663 || this.network.getMyPort() == 6662)) {
-                        numberOfAct = 0;
-                        this.sendMessageToLayer1();
-                    }
-
-
+                    manageWrite(operation);
                 }
+                logger.writeLog(operation, network.getMyPort());
             }
-
         }
     }
 
+    private void manageRead(Message receivedMessage){
+        System.out.println("He recibido un READ");
+        System.out.println("El puerto  " + receivedMessage.getPort());
+        System.out.println("La key a leer " + receivedMessage.getLine());
+
+        //check value to read
+        this.message = String.valueOf(this.data.getOrDefault(receivedMessage.getLine(), Integer.valueOf(-1)));
+
+        //send the value to the client
+        this.network.sendMessage(this.network.getClientPort(), message);
+
+    }
+
+    private void manageWrite(Message receivedMessage){
+        String ack;
+        System.out.println("He recibido un WRITE");
+        System.out.println("El puerto " + receivedMessage.getPort());
+        System.out.println("El valor a escribir key:" + receivedMessage.getLine() + " valor:" + receivedMessage.getValue());
+
+
+        this.data.put(receivedMessage.getLine(), receivedMessage.getValue());
+
+        //In case the one who sends is the client
+        if (receivedMessage.getPort() == this.network.getClientPort()) {
+
+            //replicamos el mensaje sustituyendo el puerto
+            message = receivedMessage.getLine() + ";" + receivedMessage.getValue();
+            this.network.broadcastCoreLayer(this.message);
+
+            //We wait for the ack before accepting another transaction (EAGER)
+            for (int i = 0; i < this.network.getCoreLayerPorts().length; i++) {
+                ack = this.network.receiveMessage();
+                System.out.println("Me han contestado " + ack);
+            }
+            message = "ACK";
+            this.network.sendMessage(receivedMessage.getPort(), message);
+
+        } else {
+
+            //answering
+            message = "ACK";
+
+            this.network.sendMessage(receivedMessage.getPort(), message);
+        }
+
+
+        System.out.println("---------------------------------------");
+
+        numberOfAct++;
+        this.sendMessageToServer();
+
+        if (numberOfAct == 10 && (this.network.getMyPort() == 6663 || this.network.getMyPort() == 6662)) {
+            numberOfAct = 0;
+            this.sendMessageToLayer1();
+        }
+
+
+    }
     private ArrayList<Message> parseMessage(String message) {
 
         ArrayList<Message> operations = new ArrayList<>();
@@ -106,11 +113,11 @@ public class CoreServer {
             if (transaction.contains(";")) {
                 // Write operation
                 String[] writeOperations = transaction.split(";");
-                Message m = new Message(port, "write", writeOperations[0], writeOperations[1]);
+                Message m = new Message(port, WRITE_ACTION, writeOperations[0], writeOperations[1]);
                 operations.add(m);
             } else {
                 // Read operation
-                Message m = new Message(port, "read", transaction);
+                Message m = new Message(port, READ_ACTION, transaction);
                 operations.add(m);
             }
         }
