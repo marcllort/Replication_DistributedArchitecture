@@ -46,9 +46,16 @@ public class FistLayerServer {
     }
 
     private void replicateToSecondLayer() {
+        String message = "";
             if (network.getMyPort() == FIRST_LAYER_PORTS[1]) {
                 //network.sendMessage(SECOND_LAYER_PORTS[0], hashMapToMessage());
-                System.out.println("replica");
+                for (Integer key :
+                        this.infoHashMap.keySet()) {
+                    message = message + key + "&" + this.infoHashMap.get(key) + "&";
+                }
+                if(!this.infoHashMap.isEmpty()) {
+                    this.network.broadcastLayer2(message);
+                }
             }
     }
 

@@ -1,0 +1,12 @@
+6111: READ received from node 6000 with key : 50
+6111: READ received from node 6000 with key : 31
+6111: READ received from node 6000 with key : 20
+6111: READ received from node 6000 with key : 50
+6111: READ received from node 6000 with key : 31
+6111: READ received from node 6000 with key : 20
+6111: READ received from node 6012 with key : 50
+6111: READ received from node 6012 with key : 28
+6111: READ received from node 6012 with key : 20
+6111: READ received from node 6012 with key : 353
+6111: READ received from node 6012 with key : 31
+6111: READ received from node 6012 with key : 476
