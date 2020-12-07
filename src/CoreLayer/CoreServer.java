@@ -80,25 +80,13 @@ public class CoreServer {
     private void replicateToFirstLayer() {
         if (numberOfAct == 10) {
             if (network.getMyPort() == CORE_LAYER_PORTS[1]) {
-                network.sendMessage(FIRST_LAYER_PORTS[0], hashMapToMessage());
+                network.sendMessage(FIRST_LAYER_PORTS[0], hashMapToMessage(infoHashMap));
                 numberOfAct = 0;
             } else if (network.getMyPort() == CORE_LAYER_PORTS[2]) {
-                network.sendMessage(FIRST_LAYER_PORTS[1], hashMapToMessage());
+                network.sendMessage(FIRST_LAYER_PORTS[1], hashMapToMessage(infoHashMap));
                 numberOfAct = 0;
             }
         }
-    }
-
-    private String hashMapToMessage() {
-        String message = "";
-
-        for (Integer key : infoHashMap.keySet()) {
-            message = message + key + "-" + infoHashMap.get(key) + "-";
-        }
-
-        message = message.substring(0, message.length() - 1);
-
-        return message;
     }
 
 }

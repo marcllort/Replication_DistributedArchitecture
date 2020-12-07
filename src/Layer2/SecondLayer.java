@@ -22,11 +22,8 @@ public class SecondLayer {
         System.out.println("MY PORT: " + port);
 
         network.setClientPort(CLIENT_PORT);
-
         network.setCoreLayerPorts(CORE_LAYER_PORTS);
-
         network.setFirstLayerPorts(FIRST_LAYER_PORTS);
-
         network.setSecondLayerPorts(SECOND_LAYER_PORTS);
 
         SecondLayerServer replication = new SecondLayerServer(network, infoHashMap);

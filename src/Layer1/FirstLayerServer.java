@@ -1,4 +1,4 @@
-package Layer2;
+package Layer1;
 
 
 import Utils.Logger;
@@ -7,19 +7,31 @@ import Utils.Network;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static Utils.Utils.*;
 
-public class SecondLayerServer {
+public class FirstLayerServer {
 
     private Network network;
     private Logger logger;
     private Map<Integer, Integer> infoHashMap;
 
-    SecondLayerServer(Network network, Map<Integer, Integer> infoHashMap) {
+
+    FirstLayerServer(Network network, Map<Integer, Integer> infoHashMap) {
         this.network = network;
         this.infoHashMap = infoHashMap;
-        this.logger = new Logger("src/logs/second_layer_" + (network.getMyPort() - SECOND_LAYER_PORT) + ".txt");
+        this.logger = new Logger("src/logs/first_layer_" + (network.getMyPort() - FIRST_LAYER_PORT) + ".txt");
+
+        //Every 10s we send messge to second layer
+        Timer t = new Timer();
+        t.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                replicateToSecondLayer();
+            }
+        }, 0, 10000);
     }
 
     public void replicate() {
@@ -53,6 +65,18 @@ public class SecondLayerServer {
         infoHashMap.put(receivedMessage.getLine(), receivedMessage.getValue());
 
         printSeparator();
+    }
+
+    private void replicateToSecondLayer() {
+        String message = "";
+        if (network.getMyPort() == FIRST_LAYER_PORTS[1]) {                  // NODE B2
+            for (Integer key : this.infoHashMap.keySet()) {
+                message = message + key + "&" + this.infoHashMap.get(key) + "&";
+            }
+            if (!this.infoHashMap.isEmpty()) {
+                this.network.broadcastLayer2(message);
+            }
+        }
     }
 
 }

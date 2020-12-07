@@ -1,6 +1,7 @@
 package Utils;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class Utils {
@@ -54,6 +55,17 @@ public class Utils {
         }
 
         return operations;
+    }
+
+    public static String hashMapToMessage(Map<Integer, Integer> infoHashMap) {
+        String message = "";
+
+        for (Integer key : infoHashMap.keySet()) {
+            message = message + key + "-" + infoHashMap.get(key) + "-";
+        }
+        message = message.substring(0, message.length() - 1);
+
+        return message;
     }
 
     public static void sleep() {
