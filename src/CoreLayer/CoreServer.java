@@ -25,28 +25,46 @@ public class CoreServer {
     }
 
     public void replicate() {
+        Boolean hasRead = false;
+        int hasWrite = 0;
+        String message = "";
         while (true) {
             ArrayList<Message> operations = parseMessage(network.receiveMessage());
-
             for (Message operation : operations) {
                 if (operation.getAction().equals(READ_ACTION)) {
-                    manageRead(operation);
+                    message = manageRead(operation, message);
+                    hasRead = true;
                 } else {
                     manageWrite(operation);
+                    hasWrite = operation.getPort();
                 }
                 logger.writeLog(operation, network.getMyPort());
+            }
+            if (hasRead) {
+                network.sendMessage(network.getClientPort(), message);
+                hasRead = false;
+            } else if (hasWrite != 0) {
+                network.sendMessage(hasWrite, "ACK");
+                hasWrite = 0;
+                message = "";
             }
         }
     }
 
-    private void manageRead(Message receivedMessage) {
+    private String manageRead(Message receivedMessage, String returnMessage) {
         printMessage(receivedMessage);
 
         // Get value from hashmap
         String message = String.valueOf(infoHashMap.getOrDefault(receivedMessage.getLine(), -1));
 
         // Send value to the client
-        network.sendMessage(network.getClientPort(), message);
+        if (message.equals("-1")) {
+            message = "NULL";
+        }
+
+        returnMessage += message + "/";
+
+        return returnMessage;
     }
 
     private void manageWrite(Message receivedMessage) {
@@ -66,8 +84,6 @@ public class CoreServer {
             }
         }
 
-        // Answer with ACK to the message sender
-        network.sendMessage(receivedMessage.getPort(), "ACK");
         printSeparator();
 
         // Update number of actualizations done
@@ -79,6 +95,7 @@ public class CoreServer {
 
     private void replicateToFirstLayer() {
         if (numberOfAct == 10) {
+            System.out.println("REPLICATING TO LAYER 1");
             if (network.getMyPort() == CORE_LAYER_PORTS[1]) {
                 network.sendMessage(FIRST_LAYER_PORTS[0], hashMapToMessage(infoHashMap));
                 numberOfAct = 0;

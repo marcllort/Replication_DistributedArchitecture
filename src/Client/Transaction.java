@@ -50,10 +50,9 @@ public class Transaction {
         int port = getPort(layer);
 
         network.sendMessage(port, numbers);
-        System.out.println("[SEND " + port + "] " + numbers);
 
         String response = network.receiveMessage();
-        System.out.println("[RECEIVE " + port + "] " + response);
+        System.out.println("[SEND " + port + "] " + numbers +" [RECEIVED] " + response);
     }
 
     private String getNumbers(String[] operations) {

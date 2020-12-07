@@ -1,3 +1,39 @@
 6210: READ received from node 6000 with key : 50
 6210: READ received from node 6000 with key : 31
 6210: READ received from node 6000 with key : 20
+6210: WRITE received from node 6111 with key : 50 and value 28
+6210: WRITE received from node 6111 with key : 20 and value 353
+6210: WRITE received from node 6111 with key : 31 and value 476
+6210: WRITE received from node 6111 with key : 50 and value 28
+6210: WRITE received from node 6111 with key : 20 and value 353
+6210: WRITE received from node 6111 with key : 31 and value 476
+6210: WRITE received from node 6111 with key : 50 and value 28
+6210: WRITE received from node 6111 with key : 20 and value 353
+6210: WRITE received from node 6111 with key : 31 and value 476
+6210: WRITE received from node 6111 with key : 50 and value 28
+6210: WRITE received from node 6111 with key : 20 and value 357
+6210: WRITE received from node 6111 with key : 31 and value 476
+6210: WRITE received from node 6111 with key : 50 and value 28
+6210: WRITE received from node 6111 with key : 20 and value 357
+6210: WRITE received from node 6111 with key : 31 and value 476
+6210: WRITE received from node 6111 with key : 50 and value 28
+6210: WRITE received from node 6111 with key : 20 and value 357
+6210: WRITE received from node 6111 with key : 31 and value 476
+6210: WRITE received from node 6111 with key : 50 and value 28
+6210: WRITE received from node 6111 with key : 20 and value 356
+6210: WRITE received from node 6111 with key : 31 and value 476
+6210: WRITE received from node 6111 with key : 50 and value 28
+6210: WRITE received from node 6111 with key : 20 and value 356
+6210: WRITE received from node 6111 with key : 31 and value 476
+6210: WRITE received from node 6111 with key : 50 and value 28
+6210: WRITE received from node 6111 with key : 20 and value 356
+6210: WRITE received from node 6111 with key : 31 and value 476
+6210: WRITE received from node 6111 with key : 50 and value 28
+6210: WRITE received from node 6111 with key : 20 and value 356
+6210: WRITE received from node 6111 with key : 31 and value 476
+6210: WRITE received from node 6111 with key : 50 and value 28
+6210: WRITE received from node 6111 with key : 20 and value 356
+6210: WRITE received from node 6111 with key : 31 and value 476
+6210: WRITE received from node 6111 with key : 50 and value 28
+6210: WRITE received from node 6111 with key : 20 and value 356
+6210: WRITE received from node 6111 with key : 31 and value 476

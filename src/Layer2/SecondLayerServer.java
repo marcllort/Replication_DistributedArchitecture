@@ -23,27 +23,25 @@ public class SecondLayerServer {
     }
 
     public void replicate() {
+        Boolean hasRead = false;
+        String message = "";
         while (true) {
             ArrayList<Message> operations = parseMessage(network.receiveMessage());
             for (Message operation : operations) {
                 if (operation.getAction().equals(READ_ACTION)) {
-                    manageRead(operation);
+                    message = manageRead(operation, message, infoHashMap);
+                    hasRead = true;
                 } else {
                     manageWrite(operation);
                 }
                 logger.writeLog(operation, network.getMyPort());
             }
+            if (hasRead) {
+                network.sendMessage(network.getClientPort(), message);
+                hasRead = false;
+                message = "";
+            }
         }
-    }
-
-    private void manageRead(Message receivedMessage) {
-        printMessage(receivedMessage);
-
-        // Get value from hashmap
-        String message = String.valueOf(infoHashMap.getOrDefault(receivedMessage.getLine(), -1));
-
-        // Send value to the client
-        network.sendMessage(network.getClientPort(), message);
     }
 
     private void manageWrite(Message receivedMessage) {

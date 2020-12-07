@@ -35,27 +35,25 @@ public class FirstLayerServer {
     }
 
     public void replicate() {
+        boolean hasRead = false;
+        String message = "";
         while (true) {
             ArrayList<Message> operations = parseMessage(network.receiveMessage());
             for (Message operation : operations) {
                 if (operation.getAction().equals(READ_ACTION)) {
-                    manageRead(operation);
+                    message = manageRead(operation, message, infoHashMap);
+                    hasRead = true;
                 } else {
                     manageWrite(operation);
                 }
                 logger.writeLog(operation, network.getMyPort());
             }
+            if (hasRead) {
+                network.sendMessage(network.getClientPort(), message);
+                hasRead = false;
+                message = "";
+            }
         }
-    }
-
-    private void manageRead(Message receivedMessage) {
-        printMessage(receivedMessage);
-
-        // Get value from hashmap
-        String message = String.valueOf(infoHashMap.getOrDefault(receivedMessage.getLine(), -1));
-
-        // Send value to the client
-        network.sendMessage(network.getClientPort(), message);
     }
 
     private void manageWrite(Message receivedMessage) {
@@ -68,13 +66,9 @@ public class FirstLayerServer {
     }
 
     private void replicateToSecondLayer() {
-        String message = "";
         if (network.getMyPort() == FIRST_LAYER_PORTS[1]) {                  // NODE B2
-            for (Integer key : this.infoHashMap.keySet()) {
-                message = message + key + "&" + this.infoHashMap.get(key) + "&";
-            }
             if (!this.infoHashMap.isEmpty()) {
-                this.network.broadcastLayer2(message);
+                this.network.broadcastLayer2(hashMapToMessage(infoHashMap));
             }
         }
     }

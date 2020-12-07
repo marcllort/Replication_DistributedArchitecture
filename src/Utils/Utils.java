@@ -61,12 +61,30 @@ public class Utils {
         String message = "";
 
         for (Integer key : infoHashMap.keySet()) {
-            message = message + key + "-" + infoHashMap.get(key) + "-";
+            message = message + key + ";" + infoHashMap.get(key) + "-";
         }
         message = message.substring(0, message.length() - 1);
 
         return message;
     }
+
+    public static String manageRead(Message receivedMessage, String returnMessage, Map<Integer, Integer> infoHashMap) {
+        printMessage(receivedMessage);
+
+        // Get value from hashmap
+        String message = String.valueOf(infoHashMap.getOrDefault(receivedMessage.getLine(), -1));
+
+        // Send value to the client
+        if (message.equals("-1")) {
+            message = "NULL";
+        }
+
+        returnMessage += message +"/";
+        printSeparator();
+
+        return returnMessage;
+    }
+
 
     public static void sleep() {
         try {
