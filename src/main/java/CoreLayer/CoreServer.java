@@ -3,25 +3,40 @@ package CoreLayer;
 import Utils.Logger;
 import Utils.Message;
 import Utils.Network;
+import Websockets.BaseNode;
+import Websockets.Frame;
+import Websockets.NodeRole;
+import Websockets.WebSocketEndpoint;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import static Utils.Utils.*;
 
-public class CoreServer {
+public class CoreServer extends BaseNode {
 
     private final Network network;
-    private final Logger logger;
     private final Map<Integer, Integer> infoHashMap;
     private int numberOfAct;
+    private WebSocketEndpoint webSocketEndpoint;
 
-    public CoreServer(Network network) {
+
+    public CoreServer(NodeRole nodeRole, Network network){
+        super(nodeRole);
+
         this.network = network;
         this.infoHashMap = new HashMap<>();
         this.numberOfAct = 0;
-        this.logger = new Logger("src/logs/core_layer_" + (network.getMyPort() - CORE_LAYER_PORT) + ".txt");
+
+        this.webSocketEndpoint = new WebSocketEndpoint(
+                new InetSocketAddress("localhost", node.getWsPort()),
+               logger
+        );
+
+        this.webSocketEndpoint.start();
     }
 
     public void replicate() {
@@ -89,6 +104,7 @@ public class CoreServer {
         // Update number of actualizations done
         numberOfAct++;
 
+        webSocketEndpoint.updateNodeStatus(receivedMessage.getLine(), receivedMessage.getValue());
         replicateToFirstLayer();
 
     }
@@ -106,4 +122,8 @@ public class CoreServer {
         }
     }
 
+    @Override
+    protected void action(Frame frame) throws IOException, ClassNotFoundException {
+
+    }
 }
