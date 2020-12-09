@@ -2,13 +2,9 @@ package Layer1;
 
 import Utils.Network;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static Utils.Utils.*;
 
 public class FirstLayer {
-    private static Map<Integer, Integer> infoHashMap = new HashMap<>();
 
     public static void main(String args[]) {
 
@@ -16,6 +12,7 @@ public class FirstLayer {
             System.out.println("Error in number of parameters");
             return;
         }
+
         int port = FIRST_LAYER_PORT + Integer.parseInt(args[0]);
         Network network = new Network(port);
         System.out.println("MY PORT: " + port);
@@ -25,17 +22,16 @@ public class FirstLayer {
         network.setFirstLayerPorts(FIRST_LAYER_PORTS);
         network.setSecondLayerPorts(SECOND_LAYER_PORTS);
 
-        FirstLayerServer replication = new FirstLayerServer(Integer.parseInt(args[0]),network, infoHashMap);
+        FirstLayerServer replication = new FirstLayerServer(Integer.parseInt(args[0]), network);
 
-        Thread thread = new Thread(){
-            public void run(){
+        Thread thread = new Thread() {
+            public void run() {
                 replication.startRoutine();
             }
         };
-
         thread.start();
-        replication.replicate();
 
+        replication.replicate();
     }
 
 }

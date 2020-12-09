@@ -52,7 +52,7 @@ public class Transaction {
         network.sendMessage(port, numbers);
 
         String response = network.receiveMessage();
-        System.out.println("[SEND " + port + "] " + numbers +" [RECEIVED] " + response);
+        System.out.println("[SEND " + port + "] " + numbers + " [RECEIVED] " + response);
     }
 
     private String getNumbers(String[] operations) {

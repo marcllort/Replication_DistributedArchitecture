@@ -6,9 +6,9 @@ import java.util.concurrent.TimeUnit;
 
 public class Utils {
 
-    public static int MAX_LEN = 100;
     public static final String READ_ACTION = "read";
     public static final String WRITE_ACTION = "write";
+
     public static final int CLIENT_PORT = 6000;
     public static final int CORE_LAYER_PORT = 6010;
     public static final int FIRST_LAYER_PORT = 6110;
@@ -20,7 +20,11 @@ public class Utils {
     public static final int[] FIRST_LAYER_SERVER_PORTS = {4013, 4014};
     public static final int[] SECOND_LAYER_SERVER_PORTS = {4015, 4016};
 
-    public static void printSeparator(){
+    public static final int TIMEOUT = 5;
+    public static int MAX_LEN = 100;
+
+
+    public static void printSeparator() {
         System.out.println("------------------------------------------");
     }
 
@@ -81,16 +85,15 @@ public class Utils {
             message = "NULL";
         }
 
-        returnMessage += message +"/";
+        returnMessage += message + "/";
         printSeparator();
 
         return returnMessage;
     }
 
-
     public static void sleep() {
         try {
-            TimeUnit.SECONDS.sleep(5);
+            TimeUnit.SECONDS.sleep(TIMEOUT);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -7,13 +7,6 @@ public class Message {
     private int line;
     private int value;
 
-    public Message(int port, String action, int line, int value) {
-        this.port = port;
-        this.action = action;
-        this.line = line;
-        this.value = value;
-    }
-
     public Message(String port, String action, String line, String value) {
         this.port = Integer.parseInt(port);
         this.action = action;
@@ -39,16 +32,8 @@ public class Message {
         return action;
     }
 
-    public void setAction(String action) {
-        this.action = action;
-    }
-
     public int getLine() {
         return line;
-    }
-
-    public void setLine(int line) {
-        this.line = line;
     }
 
     public int getValue() {

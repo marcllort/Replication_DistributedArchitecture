@@ -74,26 +74,6 @@ public class Network {
         return myPort;
     }
 
-    public void setMyPort(int myPort) {
-        this.myPort = myPort;
-    }
-
-    public DatagramSocket getSocket() {
-        return socket;
-    }
-
-    public void setSocket(DatagramSocket socket) {
-        this.socket = socket;
-    }
-
-    public InetAddress getReceiverHost() {
-        return receiverHost;
-    }
-
-    public void setReceiverHost(InetAddress receiverHost) {
-        this.receiverHost = receiverHost;
-    }
-
     public int getClientPort() {
         return clientPort;
     }
@@ -110,20 +90,13 @@ public class Network {
         this.coreLayerPorts = coreLayerPorts;
     }
 
-    public int[] getFirstLayerPorts() {
-        return firstLayerPorts;
-    }
-
     public void setFirstLayerPorts(int[] firstLayerPorts) {
         this.firstLayerPorts = firstLayerPorts;
-    }
-
-    public int[] getSecondLayerPorts() {
-        return secondLayerPorts;
     }
 
     public void setSecondLayerPorts(int[] secondLayerPorts) {
         this.secondLayerPorts = secondLayerPorts;
     }
+
 }
 

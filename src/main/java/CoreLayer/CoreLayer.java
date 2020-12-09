@@ -12,6 +12,7 @@ public class CoreLayer {
             System.out.println("Error in number of parameters");
             return;
         }
+
         int port = CORE_LAYER_PORT + Integer.parseInt(args[0]);
         Network network = new Network(port);
         System.out.println("MY PORT: " + port);
@@ -19,16 +20,15 @@ public class CoreLayer {
         network.setClientPort(CLIENT_PORT);
         network.setCoreLayerPorts(CORE_LAYER_PORTS);
         network.setFirstLayerPorts(FIRST_LAYER_PORTS);
-        CoreServer replication;
-        replication = new CoreServer(Integer.parseInt(args[0]),network);
-        Thread thread = new Thread(){
-            public void run(){
+
+        CoreServer replication = new CoreServer(Integer.parseInt(args[0]), network);
+        Thread thread = new Thread() {
+            public void run() {
                 replication.startRoutine();
             }
         };
 
         thread.start();
-
         replication.replicate();
     }
 

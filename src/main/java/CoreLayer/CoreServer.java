@@ -17,28 +17,26 @@ public class CoreServer extends BaseNode {
 
     private final Network network;
     private final Map<Integer, Integer> infoHashMap;
+    private final Logger logger;
     private int numberOfAct;
-    private WebSocketEndpoint webSocketEndpoint;
+    private final WebSocketEndpoint webSocketEndpoint;
 
 
-    public CoreServer(int id, Network network){
+    public CoreServer(int id, Network network) {
         super(CORE_LAYER_PORTS[id], CORE_LAYER_SERVER_PORTS[id]);
 
         this.network = network;
+        this.logger = new Logger("src/main/java/logs/core_layer_" + (network.getMyPort() - CORE_LAYER_PORT) + ".txt");
+
         this.infoHashMap = new HashMap<>();
         this.numberOfAct = 0;
 
-        this.webSocketEndpoint = new WebSocketEndpoint(
-                new InetSocketAddress("localhost", wsPort),
-               logger
-        );
-
+        this.webSocketEndpoint = new WebSocketEndpoint(new InetSocketAddress("localhost", wsPort));
         webSocketEndpoint.start();
-        this.logger = new Logger("src/main/java/logs/core_layer_" + (network.getMyPort() - CORE_LAYER_PORT) + ".txt");
     }
 
     public void replicate() {
-        Boolean hasRead = false;
+        boolean hasRead = false;
         int hasWrite = 0;
         String message = "";
         while (true) {
@@ -102,15 +100,14 @@ public class CoreServer extends BaseNode {
         // Update number of actualizations done
         numberOfAct++;
 
-        webSocketEndpoint.updateNodeStatus(receivedMessage.getLine(), receivedMessage.getValue());
+        // Update websocket
+        webSocketEndpoint.sendNewTransaction(receivedMessage.getLine(), receivedMessage.getValue());
 
         replicateToFirstLayer();
-
     }
 
     private void replicateToFirstLayer() {
         if (numberOfAct == 10) {
-            System.out.println("REPLICATING TO LAYER 1");
             if (network.getMyPort() == CORE_LAYER_PORTS[1]) {
                 network.sendMessage(FIRST_LAYER_PORTS[0], hashMapToMessage(infoHashMap));
                 numberOfAct = 0;
