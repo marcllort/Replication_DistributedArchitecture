@@ -1,14 +1,13 @@
 package Websockets;
 
-
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 
 import java.net.InetSocketAddress;
 
-public class WebSocketEndpoint extends org.java_websocket.server.WebSocketServer {
+public class WebSocketServer extends org.java_websocket.server.WebSocketServer {
 
-    public WebSocketEndpoint(InetSocketAddress address) {
+    public WebSocketServer(InetSocketAddress address) {
         super(address);
     }
 
@@ -33,6 +32,6 @@ public class WebSocketEndpoint extends org.java_websocket.server.WebSocketServer
     }
 
     public void sendNewTransaction(int key, int value) {
-        broadcast(key + "|" + value);
+        broadcast(key + "-" + value);
     }
 }

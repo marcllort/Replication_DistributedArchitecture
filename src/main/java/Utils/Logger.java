@@ -17,7 +17,7 @@ public class Logger {
             if (file.createNewFile()) {
                 System.out.println("File created: " + file.getName());
             } else {
-                System.out.println("File already exists.");
+                System.out.println("File already exists. Overwriting it...");
                 file.delete();
                 file = new File(name);
             }

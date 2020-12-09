@@ -3,7 +3,7 @@ package CoreLayer;
 import Utils.Logger;
 import Utils.Message;
 import Utils.Network;
-import Websockets.WebSocketEndpoint;
+import Websockets.WebSocketServer;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
@@ -17,8 +17,8 @@ public class CoreServer {
     private final Network network;
     private final Map<Integer, Integer> infoHashMap;
     private final Logger logger;
+    private final WebSocketServer webSocketServer;
     private int numberOfAct;
-    private final WebSocketEndpoint webSocketEndpoint;
 
 
     public CoreServer(int id, Network network) {
@@ -28,8 +28,8 @@ public class CoreServer {
         this.infoHashMap = new HashMap<>();
         this.numberOfAct = 0;
 
-        this.webSocketEndpoint = new WebSocketEndpoint(new InetSocketAddress("localhost", CORE_LAYER_SERVER_PORTS[id]));
-        webSocketEndpoint.start();
+        this.webSocketServer = new WebSocketServer(new InetSocketAddress("localhost", CORE_LAYER_SERVER_PORTS[id]));
+        webSocketServer.start();
     }
 
     public void replicate() {
@@ -98,7 +98,7 @@ public class CoreServer {
         numberOfAct++;
 
         // Update websocket
-        webSocketEndpoint.sendNewTransaction(receivedMessage.getLine(), receivedMessage.getValue());
+        webSocketServer.sendNewTransaction(receivedMessage.getLine(), receivedMessage.getValue());
 
         replicateToFirstLayer();
     }

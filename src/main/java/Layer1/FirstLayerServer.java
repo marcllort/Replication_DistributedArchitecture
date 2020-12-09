@@ -4,7 +4,7 @@ package Layer1;
 import Utils.Logger;
 import Utils.Message;
 import Utils.Network;
-import Websockets.WebSocketEndpoint;
+import Websockets.WebSocketServer;
 
 import java.net.InetSocketAddress;
 import java.util.*;
@@ -16,7 +16,7 @@ public class FirstLayerServer {
     private final Map<Integer, Integer> infoHashMap;
     private final Network network;
     private final Logger logger;
-    private final WebSocketEndpoint webSocketEndpoint;
+    private final WebSocketServer webSocketServer;
 
     FirstLayerServer(int id, Network network) {
         this.network = network;
@@ -33,8 +33,8 @@ public class FirstLayerServer {
             }
         }, 0, 10000);
 
-        this.webSocketEndpoint = new WebSocketEndpoint(new InetSocketAddress("localhost", FIRST_LAYER_SERVER_PORTS[id]));
-        webSocketEndpoint.start();
+        this.webSocketServer = new WebSocketServer(new InetSocketAddress("localhost", FIRST_LAYER_SERVER_PORTS[id]));
+        webSocketServer.start();
     }
 
     public void replicate() {
@@ -66,7 +66,7 @@ public class FirstLayerServer {
         infoHashMap.put(receivedMessage.getLine(), receivedMessage.getValue());
 
         // Update websocket
-        webSocketEndpoint.sendNewTransaction(receivedMessage.getLine(), receivedMessage.getValue());
+        webSocketServer.sendNewTransaction(receivedMessage.getLine(), receivedMessage.getValue());
 
         printSeparator();
     }
