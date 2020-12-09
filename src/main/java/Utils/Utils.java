@@ -16,7 +16,9 @@ public class Utils {
     public static final int[] CORE_LAYER_PORTS = {6010, 6011, 6012};
     public static final int[] FIRST_LAYER_PORTS = {6110, 6111};
     public static final int[] SECOND_LAYER_PORTS = {6210, 6211};
-
+    public static final int[] CORE_LAYER_SERVER_PORTS = {4010, 4011, 4012};
+    public static final int[] FIRST_LAYER_SERVER_PORTS = {4013, 4014};
+    public static final int[] SECOND_LAYER_SERVER_PORTS = {4015, 4016};
 
     public static void printSeparator(){
         System.out.println("------------------------------------------");

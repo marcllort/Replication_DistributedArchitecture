@@ -1,7 +1,6 @@
 package CoreLayer;
 
 import Utils.Network;
-import Websockets.NodeRole;
 
 import static Utils.Utils.*;
 
@@ -21,18 +20,15 @@ public class CoreLayer {
         network.setCoreLayerPorts(CORE_LAYER_PORTS);
         network.setFirstLayerPorts(FIRST_LAYER_PORTS);
         CoreServer replication;
-        switch (Integer.parseInt(args[0])){
-            case 0:
-                 replication = new CoreServer(NodeRole.A1,network);
-                break;
-            case 1:
-                 replication = new CoreServer(NodeRole.A2,network);
-                break;
-            default:
-                 replication = new CoreServer(NodeRole.A3,network);
-                break;
-        }
-        replication.startRoutine();
+        replication = new CoreServer(Integer.parseInt(args[0]),network);
+        Thread thread = new Thread(){
+            public void run(){
+                replication.startRoutine();
+            }
+        };
+
+        thread.start();
+
         replication.replicate();
     }
 

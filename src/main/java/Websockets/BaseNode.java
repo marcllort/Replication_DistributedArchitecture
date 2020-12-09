@@ -2,6 +2,7 @@ package Websockets;
 
 
 import Utils.Logger;
+import Utils.Utils;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -13,15 +14,15 @@ import static Utils.Utils.CORE_LAYER_PORT;
  * @version 1.0
  **/
 public abstract class BaseNode extends BaseServer {
-	protected NodeRole node;
+	protected int nodePort;
+	protected int wsPort;
+
 	protected Logger logger;
 
 
-	public BaseNode(NodeRole node) {
-		this.node = node;
-		this.port = node.getPort();
-		this.logger = new Logger("src/main/java/logs/core_layer_" + (node.getPort() - CORE_LAYER_PORT) + ".txt");
-
+	public BaseNode(int nodePort, int wsPort) {
+		this.nodePort = nodePort;
+		this.wsPort = wsPort;
 	}
 
 	public void startRoutine() {
@@ -38,7 +39,7 @@ public abstract class BaseNode extends BaseServer {
 				//logger.debug("New connection received on port " + this.port);
 
 				this.loadStreams(client);
-				this.action((Frame) this.inputStream.readObject());
+				this.inputStream.readObject();
 				this.closeStreams(client);
 
 				//logger.debug("New connection finished.");
@@ -60,6 +61,4 @@ public abstract class BaseNode extends BaseServer {
 
 		this.close();
 	}
-
-	protected abstract void action(Frame frame) throws IOException, ClassNotFoundException;
 }

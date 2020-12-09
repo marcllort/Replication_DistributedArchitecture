@@ -27,7 +27,7 @@ function createRow(variable) {
 
 $(document).ready(function(){
     var ws = [];
-    var initialPort = 3050;
+    var initialPort = 4010;
 
     for (let index in nodes) {
         ws[index] = new WebSocket("ws://localhost:" + (initialPort + +index));

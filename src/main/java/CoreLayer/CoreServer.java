@@ -4,11 +4,8 @@ import Utils.Logger;
 import Utils.Message;
 import Utils.Network;
 import Websockets.BaseNode;
-import Websockets.Frame;
-import Websockets.NodeRole;
 import Websockets.WebSocketEndpoint;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,19 +21,20 @@ public class CoreServer extends BaseNode {
     private WebSocketEndpoint webSocketEndpoint;
 
 
-    public CoreServer(NodeRole nodeRole, Network network){
-        super(nodeRole);
+    public CoreServer(int id, Network network){
+        super(CORE_LAYER_PORTS[id], CORE_LAYER_SERVER_PORTS[id]);
 
         this.network = network;
         this.infoHashMap = new HashMap<>();
         this.numberOfAct = 0;
 
         this.webSocketEndpoint = new WebSocketEndpoint(
-                new InetSocketAddress("localhost", node.getWsPort()),
+                new InetSocketAddress("localhost", wsPort),
                logger
         );
 
-        this.webSocketEndpoint.start();
+        webSocketEndpoint.start();
+        this.logger = new Logger("src/main/java/logs/core_layer_" + (network.getMyPort() - CORE_LAYER_PORT) + ".txt");
     }
 
     public void replicate() {
@@ -105,6 +103,7 @@ public class CoreServer extends BaseNode {
         numberOfAct++;
 
         webSocketEndpoint.updateNodeStatus(receivedMessage.getLine(), receivedMessage.getValue());
+
         replicateToFirstLayer();
 
     }
@@ -120,10 +119,5 @@ public class CoreServer extends BaseNode {
                 numberOfAct = 0;
             }
         }
-    }
-
-    @Override
-    protected void action(Frame frame) throws IOException, ClassNotFoundException {
-
     }
 }

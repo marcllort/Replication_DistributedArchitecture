@@ -4,7 +4,10 @@ package Layer1;
 import Utils.Logger;
 import Utils.Message;
 import Utils.Network;
+import Websockets.BaseNode;
+import Websockets.WebSocketEndpoint;
 
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Timer;
@@ -12,17 +15,18 @@ import java.util.TimerTask;
 
 import static Utils.Utils.*;
 
-public class FirstLayerServer {
+public class FirstLayerServer extends BaseNode {
 
     private Network network;
     private Logger logger;
     private Map<Integer, Integer> infoHashMap;
+    private WebSocketEndpoint webSocketEndpoint;
 
-
-    FirstLayerServer(Network network, Map<Integer, Integer> infoHashMap) {
+    FirstLayerServer(int id, Network network, Map<Integer, Integer> infoHashMap) {
+        super(FIRST_LAYER_PORTS[id], FIRST_LAYER_SERVER_PORTS[id]);
         this.network = network;
         this.infoHashMap = infoHashMap;
-        this.logger = new Logger("src/logs/first_layer_" + (network.getMyPort() - FIRST_LAYER_PORT) + ".txt");
+        this.logger = new Logger("src/main/java/logs/first_layer_" + (network.getMyPort() - FIRST_LAYER_PORT) + ".txt");
 
         //Every 10s we send messge to second layer
         Timer t = new Timer();
@@ -32,6 +36,13 @@ public class FirstLayerServer {
                 replicateToSecondLayer();
             }
         }, 0, 10000);
+
+        this.webSocketEndpoint = new WebSocketEndpoint(
+                new InetSocketAddress("localhost", wsPort),
+                logger
+        );
+
+        webSocketEndpoint.start();
     }
 
     public void replicate() {
@@ -63,6 +74,8 @@ public class FirstLayerServer {
         infoHashMap.put(receivedMessage.getLine(), receivedMessage.getValue());
 
         printSeparator();
+        webSocketEndpoint.updateNodeStatus(receivedMessage.getLine(), receivedMessage.getValue());
+
     }
 
     private void replicateToSecondLayer() {

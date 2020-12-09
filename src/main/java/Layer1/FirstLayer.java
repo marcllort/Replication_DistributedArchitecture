@@ -25,7 +25,15 @@ public class FirstLayer {
         network.setFirstLayerPorts(FIRST_LAYER_PORTS);
         network.setSecondLayerPorts(SECOND_LAYER_PORTS);
 
-        FirstLayerServer replication = new FirstLayerServer(network, infoHashMap);
+        FirstLayerServer replication = new FirstLayerServer(Integer.parseInt(args[0]),network, infoHashMap);
+
+        Thread thread = new Thread(){
+            public void run(){
+                replication.startRoutine();
+            }
+        };
+
+        thread.start();
         replication.replicate();
 
     }
