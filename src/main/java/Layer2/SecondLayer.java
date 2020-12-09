@@ -24,13 +24,6 @@ public class SecondLayer {
 
         SecondLayerServer replication = new SecondLayerServer(Integer.parseInt(args[0]), network);
 
-        Thread thread = new Thread() {
-            public void run() {
-                replication.startRoutine();
-            }
-        };
-        thread.start();
-
         replication.replicate();
     }
 

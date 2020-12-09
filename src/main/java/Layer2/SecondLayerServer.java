@@ -4,7 +4,6 @@ package Layer2;
 import Utils.Logger;
 import Utils.Message;
 import Utils.Network;
-import Websockets.BaseNode;
 import Websockets.WebSocketEndpoint;
 
 import java.net.InetSocketAddress;
@@ -14,7 +13,7 @@ import java.util.Map;
 
 import static Utils.Utils.*;
 
-public class SecondLayerServer extends BaseNode {
+public class SecondLayerServer {
 
     private final Network network;
     private final Logger logger;
@@ -22,14 +21,12 @@ public class SecondLayerServer extends BaseNode {
     private final WebSocketEndpoint webSocketEndpoint;
 
     SecondLayerServer(int id, Network network) {
-        super(SECOND_LAYER_PORTS[id], SECOND_LAYER_SERVER_PORTS[id]);
-
         this.network = network;
         this.logger = new Logger("src/main/java/logs/second_layer_" + (network.getMyPort() - SECOND_LAYER_PORT) + ".txt");
 
         this.infoHashMap = new HashMap<>();
 
-        this.webSocketEndpoint = new WebSocketEndpoint(new InetSocketAddress("localhost", wsPort));
+        this.webSocketEndpoint = new WebSocketEndpoint(new InetSocketAddress("localhost", SECOND_LAYER_SERVER_PORTS[id]));
         webSocketEndpoint.start();
     }
 

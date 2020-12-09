@@ -22,13 +22,7 @@ public class CoreLayer {
         network.setFirstLayerPorts(FIRST_LAYER_PORTS);
 
         CoreServer replication = new CoreServer(Integer.parseInt(args[0]), network);
-        Thread thread = new Thread() {
-            public void run() {
-                replication.startRoutine();
-            }
-        };
 
-        thread.start();
         replication.replicate();
     }
 

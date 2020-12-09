@@ -3,7 +3,6 @@ package CoreLayer;
 import Utils.Logger;
 import Utils.Message;
 import Utils.Network;
-import Websockets.BaseNode;
 import Websockets.WebSocketEndpoint;
 
 import java.net.InetSocketAddress;
@@ -13,7 +12,7 @@ import java.util.Map;
 
 import static Utils.Utils.*;
 
-public class CoreServer extends BaseNode {
+public class CoreServer {
 
     private final Network network;
     private final Map<Integer, Integer> infoHashMap;
@@ -23,15 +22,13 @@ public class CoreServer extends BaseNode {
 
 
     public CoreServer(int id, Network network) {
-        super(CORE_LAYER_PORTS[id], CORE_LAYER_SERVER_PORTS[id]);
-
         this.network = network;
         this.logger = new Logger("src/main/java/logs/core_layer_" + (network.getMyPort() - CORE_LAYER_PORT) + ".txt");
 
         this.infoHashMap = new HashMap<>();
         this.numberOfAct = 0;
 
-        this.webSocketEndpoint = new WebSocketEndpoint(new InetSocketAddress("localhost", wsPort));
+        this.webSocketEndpoint = new WebSocketEndpoint(new InetSocketAddress("localhost", CORE_LAYER_SERVER_PORTS[id]));
         webSocketEndpoint.start();
     }
 

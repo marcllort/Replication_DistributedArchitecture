@@ -24,13 +24,6 @@ public class FirstLayer {
 
         FirstLayerServer replication = new FirstLayerServer(Integer.parseInt(args[0]), network);
 
-        Thread thread = new Thread() {
-            public void run() {
-                replication.startRoutine();
-            }
-        };
-        thread.start();
-
         replication.replicate();
     }
 

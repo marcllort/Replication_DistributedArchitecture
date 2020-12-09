@@ -4,7 +4,6 @@ package Layer1;
 import Utils.Logger;
 import Utils.Message;
 import Utils.Network;
-import Websockets.BaseNode;
 import Websockets.WebSocketEndpoint;
 
 import java.net.InetSocketAddress;
@@ -12,7 +11,7 @@ import java.util.*;
 
 import static Utils.Utils.*;
 
-public class FirstLayerServer extends BaseNode {
+public class FirstLayerServer {
 
     private final Map<Integer, Integer> infoHashMap;
     private final Network network;
@@ -20,8 +19,6 @@ public class FirstLayerServer extends BaseNode {
     private final WebSocketEndpoint webSocketEndpoint;
 
     FirstLayerServer(int id, Network network) {
-        super(FIRST_LAYER_PORTS[id], FIRST_LAYER_SERVER_PORTS[id]);
-
         this.network = network;
         this.logger = new Logger("src/main/java/logs/first_layer_" + (network.getMyPort() - FIRST_LAYER_PORT) + ".txt");
 
@@ -36,7 +33,7 @@ public class FirstLayerServer extends BaseNode {
             }
         }, 0, 10000);
 
-        this.webSocketEndpoint = new WebSocketEndpoint(new InetSocketAddress("localhost", wsPort));
+        this.webSocketEndpoint = new WebSocketEndpoint(new InetSocketAddress("localhost", FIRST_LAYER_SERVER_PORTS[id]));
         webSocketEndpoint.start();
     }
 
