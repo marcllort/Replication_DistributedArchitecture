@@ -15,7 +15,7 @@ function findPreviousRowId(variable) {
     return candidate === 0 ? null : "value-" + candidate;
 }
 
-function createRow(key) {
+function addRow(key) {
     str = "<tr id=\"value-" + key + "\"><td>" + key + "</td>";
     for (let index in nodes) {
         str += "<td id=\"" + nodes[index] + "-" + key + "\"></td>";
@@ -24,7 +24,7 @@ function createRow(key) {
     return str;
 }
 
-$(document).ready(function () {
+function ready() {
     var ws = [];
     var initialPort = 4010;
 
@@ -42,7 +42,7 @@ $(document).ready(function () {
             if (!keys.includes(variable)) {
                 let id = findPreviousRowId(variable);
                 console.log(id);
-                let row = createRow(variable);
+                let row = addRow(variable);
                 if (id != null)
                     document.getElementById(id).insertAdjacentHTML('afterend', row);
                 else
@@ -54,4 +54,10 @@ $(document).ready(function () {
             updateNodeValue(nodes[index] + "-" + variable, value);
         };
     }
-});
+}
+
+document.onreadystatechange = function () {
+    if (document.readyState == "interactive") {
+        ready()
+    }
+}
