@@ -16,9 +16,9 @@ function findPreviousRowId(variable) {
 }
 
 function createRow(key) {
-    str = "<tr id=\"value-" + key + "\"><th>" + key + "</th>";
+    str = "<tr id=\"value-" + key + "\"><td>" + key + "</td>";
     for (let index in nodes) {
-        str += "<th id=\"" + nodes[index] + "-" + key + "\"></th>";
+        str += "<td id=\"" + nodes[index] + "-" + key + "\"></td>";
     }
     str += "</tr>";
     return str;
