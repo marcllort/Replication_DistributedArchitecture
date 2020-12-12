@@ -1,96 +1,129 @@
-6111: READ received from node 6000 with key : 50
-6111: READ received from node 6000 with key : 31
-6111: READ received from node 6000 with key : 20
-6111: WRITE received from node 6012 with key : 50 and value 28
-6111: WRITE received from node 6012 with key : 20 and value 353
-6111: WRITE received from node 6012 with key : 31 and value 476
-6111: WRITE received from node 6012 with key : 50 and value 28
-6111: WRITE received from node 6012 with key : 20 and value 357
-6111: WRITE received from node 6012 with key : 31 and value 476
-6111: READ received from node 6000 with key : 50
-6111: READ received from node 6000 with key : 31
-6111: READ received from node 6000 with key : 20
-6111: WRITE received from node 6012 with key : 50 and value 28
-6111: WRITE received from node 6012 with key : 20 and value 356
-6111: WRITE received from node 6012 with key : 31 and value 476
-6111: WRITE received from node 6012 with key : 50 and value 28
-6111: WRITE received from node 6012 with key : 20 and value 356
-6111: WRITE received from node 6012 with key : 31 and value 476
-6111: WRITE received from node 6012 with key : 50 and value 28
-6111: WRITE received from node 6012 with key : 20 and value 356
-6111: WRITE received from node 6012 with key : 31 and value 476
-6111: READ received from node 6000 with key : 50
-6111: READ received from node 6000 with key : 31
-6111: READ received from node 6000 with key : 20
-6111: WRITE received from node 6012 with key : 50 and value 28
-6111: WRITE received from node 6012 with key : 20 and value 356
-6111: WRITE received from node 6012 with key : 31 and value 476
-6111: READ received from node 6000 with key : 50
-6111: READ received from node 6000 with key : 31
-6111: READ received from node 6000 with key : 20
-6111: READ received from node 6000 with key : 50
-6111: READ received from node 6000 with key : 31
-6111: READ received from node 6000 with key : 20
-6111: WRITE received from node 6012 with key : 50 and value 28
-6111: WRITE received from node 6012 with key : 20 and value 353
-6111: WRITE received from node 6012 with key : 31 and value 476
 6111: READ received from node 6000 with key : 1
 6111: READ received from node 6000 with key : 2
 6111: READ received from node 6000 with key : 3
-6111: WRITE received from node 6012 with key : 1 and value 28
-6111: WRITE received from node 6012 with key : 50 and value 28
-6111: WRITE received from node 6012 with key : 2 and value 476
-6111: WRITE received from node 6012 with key : 3 and value 356
-6111: WRITE received from node 6012 with key : 20 and value 357
-6111: WRITE received from node 6012 with key : 31 and value 478
-6111: READ received from node 6000 with key : 1
-6111: READ received from node 6000 with key : 2
-6111: READ received from node 6000 with key : 3
-6111: WRITE received from node 6012 with key : 1 and value 28
-6111: WRITE received from node 6012 with key : 50 and value 28
-6111: WRITE received from node 6012 with key : 2 and value 478
-6111: WRITE received from node 6012 with key : 3 and value 357
-6111: WRITE received from node 6012 with key : 20 and value 357
-6111: WRITE received from node 6012 with key : 31 and value 478
-6111: READ received from node 6000 with key : 1
-6111: READ received from node 6000 with key : 2
-6111: READ received from node 6000 with key : 3
-6111: WRITE received from node 6012 with key : 1 and value 30
-6111: WRITE received from node 6012 with key : 50 and value 28
-6111: WRITE received from node 6012 with key : 2 and value 2
-6111: WRITE received from node 6012 with key : 3 and value 0
-6111: WRITE received from node 6012 with key : 20 and value 357
-6111: WRITE received from node 6012 with key : 31 and value 478
-6111: WRITE received from node 6012 with key : 1 and value 60
-6111: WRITE received from node 6012 with key : 50 and value 28
-6111: WRITE received from node 6012 with key : 2 and value 5
-6111: WRITE received from node 6012 with key : 3 and value 44
-6111: WRITE received from node 6012 with key : 20 and value 357
-6111: WRITE received from node 6012 with key : 31 and value 478
-6111: WRITE received from node 6012 with key : 1 and value 30
-6111: WRITE received from node 6012 with key : 50 and value 28
+6111: WRITE received from node 6012 with key : 1 and value 40
 6111: WRITE received from node 6012 with key : 2 and value 3
 6111: WRITE received from node 6012 with key : 3 and value 100
-6111: WRITE received from node 6012 with key : 20 and value 357
-6111: WRITE received from node 6012 with key : 31 and value 478
 6111: READ received from node 6000 with key : 1
 6111: READ received from node 6000 with key : 2
 6111: READ received from node 6000 with key : 3
 6111: WRITE received from node 6012 with key : 1 and value 70
-6111: WRITE received from node 6012 with key : 50 and value 28
 6111: WRITE received from node 6012 with key : 2 and value 5
 6111: WRITE received from node 6012 with key : 3 and value 66
-6111: WRITE received from node 6012 with key : 20 and value 357
-6111: WRITE received from node 6012 with key : 31 and value 478
-6111: WRITE received from node 6012 with key : 1 and value 60
-6111: WRITE received from node 6012 with key : 50 and value 28
-6111: WRITE received from node 6012 with key : 2 and value 5
-6111: WRITE received from node 6012 with key : 3 and value 66
-6111: WRITE received from node 6012 with key : 20 and value 357
-6111: WRITE received from node 6012 with key : 31 and value 478
+6111: READ received from node 6000 with key : 1
+6111: READ received from node 6000 with key : 2
+6111: READ received from node 6000 with key : 3
+6111: WRITE received from node 6012 with key : 1 and value 30
+6111: WRITE received from node 6012 with key : 2 and value 3
+6111: WRITE received from node 6012 with key : 3 and value 100
+6111: READ received from node 6000 with key : 1
+6111: READ received from node 6000 with key : 2
+6111: READ received from node 6000 with key : 3
 6111: WRITE received from node 6012 with key : 1 and value 70
-6111: WRITE received from node 6012 with key : 50 and value 28
 6111: WRITE received from node 6012 with key : 2 and value 5
 6111: WRITE received from node 6012 with key : 3 and value 66
-6111: WRITE received from node 6012 with key : 20 and value 357
-6111: WRITE received from node 6012 with key : 31 and value 478
+6111: WRITE received from node 6012 with key : 1 and value 60
+6111: WRITE received from node 6012 with key : 2 and value 5
+6111: WRITE received from node 6012 with key : 3 and value 66
+6111: WRITE received from node 6012 with key : 1 and value 70
+6111: WRITE received from node 6012 with key : 2 and value 5
+6111: WRITE received from node 6012 with key : 3 and value 66
+6111: READ received from node 6000 with key : 1
+6111: READ received from node 6000 with key : 2
+6111: READ received from node 6000 with key : 3
+6111: WRITE received from node 6012 with key : 1 and value 40
+6111: WRITE received from node 6012 with key : 2 and value 3
+6111: WRITE received from node 6012 with key : 3 and value 100
+6111: READ received from node 6000 with key : 1
+6111: READ received from node 6000 with key : 2
+6111: READ received from node 6000 with key : 3
+6111: WRITE received from node 6012 with key : 1 and value 70
+6111: WRITE received from node 6012 with key : 2 and value 5
+6111: WRITE received from node 6012 with key : 3 and value 66
+6111: WRITE received from node 6012 with key : 1 and value 60
+6111: WRITE received from node 6012 with key : 2 and value 5
+6111: WRITE received from node 6012 with key : 3 and value 66
+6111: WRITE received from node 6012 with key : 1 and value 10
+6111: WRITE received from node 6012 with key : 2 and value 5
+6111: WRITE received from node 6012 with key : 3 and value 66
+6111: READ received from node 6000 with key : 1
+6111: READ received from node 6000 with key : 2
+6111: READ received from node 6000 with key : 3
+6111: WRITE received from node 6012 with key : 1 and value 40
+6111: WRITE received from node 6012 with key : 2 and value 4
+6111: WRITE received from node 6012 with key : 3 and value 100
+6111: READ received from node 6000 with key : 1
+6111: READ received from node 6000 with key : 2
+6111: READ received from node 6000 with key : 3
+6111: WRITE received from node 6012 with key : 1 and value 70
+6111: WRITE received from node 6012 with key : 2 and value 5
+6111: WRITE received from node 6012 with key : 3 and value 66
+6111: WRITE received from node 6012 with key : 1 and value 70
+6111: WRITE received from node 6012 with key : 2 and value 5
+6111: WRITE received from node 6012 with key : 3 and value 66
+6111: WRITE received from node 6012 with key : 1 and value 10
+6111: WRITE received from node 6012 with key : 2 and value 1
+6111: WRITE received from node 6012 with key : 3 and value 66
+6111: READ received from node 6000 with key : 1
+6111: READ received from node 6000 with key : 2
+6111: READ received from node 6000 with key : 3
+6111: WRITE received from node 6012 with key : 1 and value 40
+6111: WRITE received from node 6012 with key : 2 and value 4
+6111: WRITE received from node 6012 with key : 3 and value 23
+6111: READ received from node 6000 with key : 1
+6111: READ received from node 6000 with key : 2
+6111: READ received from node 6000 with key : 3
+6111: READ received from node 6000 with key : 1
+6111: READ received from node 6000 with key : 2
+6111: READ received from node 6000 with key : 3
+6111: WRITE received from node 6012 with key : 1 and value 40
+6111: WRITE received from node 6012 with key : 2 and value 3
+6111: WRITE received from node 6012 with key : 3 and value 100
+6111: WRITE received from node 6012 with key : 1 and value 70
+6111: WRITE received from node 6012 with key : 2 and value 5
+6111: WRITE received from node 6012 with key : 3 and value 66
+6111: WRITE received from node 6012 with key : 1 and value 60
+6111: WRITE received from node 6012 with key : 2 and value 5
+6111: WRITE received from node 6012 with key : 3 and value 66
+6111: WRITE received from node 6012 with key : 1 and value 10
+6111: WRITE received from node 6012 with key : 2 and value 5
+6111: WRITE received from node 6012 with key : 3 and value 66
+6111: READ received from node 6000 with key : 1
+6111: READ received from node 6000 with key : 2
+6111: READ received from node 6000 with key : 3
+6111: WRITE received from node 6012 with key : 1 and value 40
+6111: WRITE received from node 6012 with key : 2 and value 4
+6111: WRITE received from node 6012 with key : 3 and value 100
+6111: READ received from node 6000 with key : 1
+6111: READ received from node 6000 with key : 2
+6111: READ received from node 6000 with key : 3
+6111: WRITE received from node 6012 with key : 1 and value 70
+6111: WRITE received from node 6012 with key : 2 and value 5
+6111: WRITE received from node 6012 with key : 3 and value 66
+6111: WRITE received from node 6012 with key : 1 and value 70
+6111: WRITE received from node 6012 with key : 2 and value 5
+6111: WRITE received from node 6012 with key : 3 and value 66
+6111: WRITE received from node 6012 with key : 1 and value 10
+6111: WRITE received from node 6012 with key : 2 and value 1
+6111: WRITE received from node 6012 with key : 3 and value 66
+6111: READ received from node 6000 with key : 1
+6111: READ received from node 6000 with key : 2
+6111: READ received from node 6000 with key : 3
+6111: WRITE received from node 6012 with key : 1 and value 40
+6111: WRITE received from node 6012 with key : 2 and value 4
+6111: WRITE received from node 6012 with key : 3 and value 23
+6111: WRITE received from node 6012 with key : 1 and value 60
+6111: WRITE received from node 6012 with key : 2 and value 5
+6111: WRITE received from node 6012 with key : 3 and value 66
+6111: WRITE received from node 6012 with key : 1 and value 70
+6111: WRITE received from node 6012 with key : 2 and value 5
+6111: WRITE received from node 6012 with key : 3 and value 66
+6111: WRITE received from node 6012 with key : 1 and value 10
+6111: WRITE received from node 6012 with key : 2 and value 1
+6111: WRITE received from node 6012 with key : 3 and value 5
+6111: WRITE received from node 6012 with key : 1 and value 10
+6111: WRITE received from node 6012 with key : 2 and value 4
+6111: WRITE received from node 6012 with key : 3 and value 23
+6111: WRITE received from node 6012 with key : 1 and value 40
+6111: WRITE received from node 6012 with key : 2 and value 4
+6111: WRITE received from node 6012 with key : 3 and value 100
