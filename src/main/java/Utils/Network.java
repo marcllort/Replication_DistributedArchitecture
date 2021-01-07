@@ -99,7 +99,7 @@ public class Network {
         //Timeout of 10s
         if (contains(coreLayerPorts, myPort)) {
             try {
-                this.socket.setSoTimeout(100000);
+                this.socket.setSoTimeout(40000);
             } catch (SocketException e) {
                 e.printStackTrace();
             }

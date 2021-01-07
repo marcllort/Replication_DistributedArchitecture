@@ -1,12 +1,6 @@
-6110: WRITE received from node 6011 with key : 1 and value 40
-6110: WRITE received from node 6011 with key : 2 and value 3
+6110: WRITE received from node 6011 with key : 1 and value 90
+6110: WRITE received from node 6011 with key : 2 and value 90
 6110: WRITE received from node 6011 with key : 3 and value 100
-6110: WRITE received from node 6011 with key : 1 and value 70
-6110: WRITE received from node 6011 with key : 2 and value 5
-6110: WRITE received from node 6011 with key : 3 and value 66
-6110: WRITE received from node 6011 with key : 1 and value 60
-6110: WRITE received from node 6011 with key : 2 and value 5
-6110: WRITE received from node 6011 with key : 3 and value 66
-6110: WRITE received from node 6011 with key : 1 and value 70
-6110: WRITE received from node 6011 with key : 2 and value 5
-6110: WRITE received from node 6011 with key : 3 and value 66
+6110: WRITE received from node 6011 with key : 1 and value 110
+6110: WRITE received from node 6011 with key : 2 and value 120
+6110: WRITE received from node 6011 with key : 3 and value 130
