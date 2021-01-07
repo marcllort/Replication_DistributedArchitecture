@@ -17,6 +17,7 @@ public class FirstLayerServer {
     private final Network network;
     private final Logger logger;
     private final WebSocketServer webSocketServer;
+    private final Timer t;
 
     FirstLayerServer(int id, Network network) {
         this.network = network;
@@ -25,13 +26,8 @@ public class FirstLayerServer {
         this.infoHashMap = new HashMap<>();
 
         //Every 10s we send messge to second layer
-        Timer t = new Timer();
-        t.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                replicateToSecondLayer();
-            }
-        }, 0, 10000);
+        t = new Timer();
+
 
         this.webSocketServer = new WebSocketServer(new InetSocketAddress("localhost", FIRST_LAYER_SERVER_PORTS[id]));
         webSocketServer.start();
@@ -39,7 +35,9 @@ public class FirstLayerServer {
 
     public void replicate() {
         boolean hasRead = false;
+        boolean startReplicateDone = false;
         String message = "";
+
         while (true) {
             ArrayList<Message> operations = parseMessage(network.receiveMessage());
             for (Message operation : operations) {
@@ -48,6 +46,15 @@ public class FirstLayerServer {
                     hasRead = true;
                 } else {
                     manageWrite(operation);
+                    if (!startReplicateDone) {
+                        t.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                replicateToSecondLayer();
+                            }
+                        }, 10000, 10000);
+                        startReplicateDone = true;
+                    }
                 }
                 logger.writeLog(operation, network.getMyPort());
             }
@@ -56,6 +63,7 @@ public class FirstLayerServer {
                 hasRead = false;
                 message = "";
             }
+
         }
     }
 

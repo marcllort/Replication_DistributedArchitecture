@@ -1,9 +1,10 @@
 package Utils;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
+import java.net.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static Utils.Utils.MAX_LEN;
 
@@ -29,12 +30,19 @@ public class Network {
         }
     }
 
+    public static boolean contains(final int[] arr, final int key) {
+        Arrays.sort(arr);
+        return Arrays.binarySearch(arr, key) >= 0;
+    }
+
     public String receiveMessage() {
         byte[] receiverBuffer = new byte[MAX_LEN];
         DatagramPacket packetReceiver = new DatagramPacket(receiverBuffer, MAX_LEN);
 
         try {
             this.socket.receive(packetReceiver);
+        } catch (SocketTimeoutException e) {
+            return "timeout";
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -88,6 +96,14 @@ public class Network {
 
     public void setCoreLayerPorts(int[] coreLayerPorts) {
         this.coreLayerPorts = coreLayerPorts;
+        //Timeout of 10s
+        if (contains(coreLayerPorts, myPort)) {
+            try {
+                this.socket.setSoTimeout(100000);
+            } catch (SocketException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void setFirstLayerPorts(int[] firstLayerPorts) {

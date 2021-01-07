@@ -38,23 +38,29 @@ public class CoreServer {
         String message = "";
         while (true) {
             ArrayList<Message> operations = parseMessage(network.receiveMessage());
-            for (Message operation : operations) {
-                if (operation.getAction().equals(READ_ACTION)) {
-                    message = manageRead(operation, message);
-                    hasRead = true;
-                } else {
-                    manageWrite(operation);
-                    hasWrite = operation.getPort();
+            if (operations.isEmpty()) {
+                // For eventual consistency, delete/comment both lines to disable
+                numberOfAct = 10;
+                replicateToFirstLayer();
+            } else {
+                for (Message operation : operations) {
+                    if (operation.getAction().equals(READ_ACTION)) {
+                        message = manageRead(operation, message);
+                        hasRead = true;
+                    } else {
+                        manageWrite(operation);
+                        hasWrite = operation.getPort();
+                    }
+                    logger.writeLog(operation, network.getMyPort());
                 }
-                logger.writeLog(operation, network.getMyPort());
-            }
-            if (hasRead) {
-                network.sendMessage(network.getClientPort(), message);
-                hasRead = false;
-            } else if (hasWrite != 0) {
-                network.sendMessage(hasWrite, "ACK");
-                hasWrite = 0;
-                message = "";
+                if (hasRead) {
+                    network.sendMessage(network.getClientPort(), message);
+                    hasRead = false;
+                } else if (hasWrite != 0) {
+                    network.sendMessage(hasWrite, "ACK");
+                    hasWrite = 0;
+                    message = "";
+                }
             }
         }
     }

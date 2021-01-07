@@ -39,8 +39,11 @@ public class Utils {
     }
 
     public static ArrayList<Message> parseMessage(String message) {
-
         ArrayList<Message> operations = new ArrayList<>();
+
+        if (message.equals("timeout")){
+            return operations;
+        }
 
         String[] parts = message.split("&");
         String[] transactions = parts[1].split("-");
